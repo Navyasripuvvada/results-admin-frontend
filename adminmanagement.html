@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin results management</title>
+    <style>
+        body{
+            background-color: #f1f5f9;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        .main{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap:10px;
+        }
+        .main h2{
+            color: maroon;
+            font-size: 35px;
+        }
+        label{
+            height: 35px;
+            width:150px;
+            background-color:rgb(235, 204, 209);
+            text-align: center;
+            color:navy;
+            font-weight: bold;
+        }
+
+        .inner,.inner1,.inner2,.inner3,.inner4,.inner5,.inner6,.inner7,.inner8{
+            display:flex ;
+            align-items: center;
+            justify-content:space-around;
+        }
+        input {
+            height: 30px;
+            width:300px;
+        }
+        .buttons{
+            display: flex;
+            align-items: center;
+            justify-content:space-between;
+            width: 400px;
+            margin-top: 20px;
+        }
+        #addresult{
+            height: 30px;
+            width:80px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }
+        #addresult:hover{
+             background-color: rgb(8, 86, 8);
+        }
+        #update{
+            height: 30px;
+            width:80px;
+            background-color:orange;
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }
+        #update:hover{
+             background-color:orangered;
+        }
+         #viewall{
+            height: 30px;
+            width:80px;
+            background-color:rgb(208, 208, 10);
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }
+        #viewall:hover{
+             background-color:rgb(155, 155, 8);
+        }
+        .getallresults{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        #resultsTable{
+            height: 600px;
+            width:100%;
+            border-collapse: collapse;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        thead {
+        background-color: #3b82f6; 
+        color: white;
+        height: 40px;
+        }
+        tr,td{
+            border-collapse: collapse;
+        }
+        #editbtn{
+            height: 20px;
+            width:50px;
+            background-color: orange;
+            border:none;
+            color: white;
+        }
+        #editbtn:hover{
+            background-color: rgb(158, 109, 17);
+        }
+        #deletebtn{
+            height: 20px;
+            width:50px;
+            background-color:red;
+            border:none;
+            color: white;
+        }
+        #deletebtn:hover{
+            background-color: rgb(158, 17, 17);
+        }
+        .message p{
+            color:purple
+        }
+
+    </style>
+</head>
+<body>
+    <form class="form">
+        <div class="main">
+            <h2>Student Results Management Page</h2>
+            <div class="inner">
+                <label for="hall_ticket">Hallticket Number</label>
+                <input type="text" id="hall_ticket" placeholder="Hallticket number">
+           </div>
+           <div class="inner1">
+                <label for="student_name">Student name</label>
+                <input type="text" id="student_name" placeholder="Student name">
+           </div>
+           <div class="inner2">
+                <label for="course">Course</label>
+                <input type="text" id="course" placeholder="Course">
+           </div>
+           <div class="inner3">
+                <label for="branch">Branch</label>
+                <input type="text" id="branch" placeholder="Branch">
+           </div>
+           <div class="inner4">
+                <label for="year">Year</label>
+                <input type="text" id="year" placeholder="year">
+           </div>
+           <div class="inner5">
+                <label for="semester">Semester</label>
+                <input type="text" id="semester" placeholder="semester">
+           </div>
+           <div class="inner6">
+                <label for="python">Python Marks</label>
+                <input type="number" id="python" placeholder="pyhton marks">
+           </div>
+           <div class="inner7">
+                <label for="react">React Marks</label>
+                <input type="number" id="react" placeholder="react marks">
+           </div>
+           <div class="inner8">
+                <label for="nodejs">Nodejs Marks</label>
+                <input type="number" id="nodejs" placeholder="nodejs">
+           </div>
+           <div class="buttons">
+               <button type="submit" onclick="" id="addresult">ADD</button>
+               <button type="submit" onclick = "" id="update">UPDATE</button>
+               <button type="button" onclik="" id="viewall">VIEW ALL</button>
+           </div>
+           <div class="message">
+            <p>check your results <a href = "userresults.html">click here!</a></p>
+           </div>
+        </div>
+    </forms>
+    <div class="getallresults">
+        <table id="resultsTable" border="1" style="display:none;">
+            <thead>
+                <tr>
+                <th>Hallticket</th>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Branch</th>
+                <th>Year</th>
+                <th>Semester</th>
+                <th>Python</th>
+                <th>React</th>
+                <th>NodeJS</th>
+                <th>Total</th>
+                <th>Grade</th>
+                <th>Status</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="resultsBody"></tbody>
+        </table>
+    </div>
+        <script>
+            const addResult = document.getElementById("addresult")
+            addResult.addEventListener("click",async(e)=>{
+                e.preventDefault();
+                try{
+                const token = localStorage.getItem("token");
+                if(!token){
+                    alert("please login first")
+                }
+                const hallticket_number = document.getElementById("hall_ticket").value;
+                const student_name = document.getElementById("student_name").value;
+                const course = document.getElementById("course").value;
+                const branch = document.getElementById("branch").value;
+                const year = document.getElementById("year").value;
+                const semester = document.getElementById("semester").value;
+                const python = document.getElementById("python").value;
+                const react = document.getElementById("react").value;
+                const nodejs = document.getElementById("nodejs").value;
+                const res = await fetch("https://resultsmanagementsystem.vercel.app/admin/results",{method:"POST",
+                    headers:{"Content-Type":"application/json", "Authorization": `Bearer ${token}`},
+                    body:JSON.stringify({hallticket_number,student_name,course,branch,year,semester,python,react,nodejs})
+                })
+                const data = await res.json();
+                if(res.ok){
+                    alert("added successfully")
+                }else{
+                    alert("something went wrong")
+                }
+            }catch(err){
+                console.error("fetch error",err)
+                alert("something went wrong")            
+            }
+            })
+        
+        const getall = document.getElementById("viewall")
+        getall.addEventListener("click",async(e)=>{
+            e.preventDefault();
+            const token = localStorage.getItem("token");
+            console.log(token)
+            if(!token){
+                alert("please login")
+            }
+            try{
+            const res =   await fetch("https://resultsmanagementsystem.vercel.app/admin/results",{method:"GET",
+                headers:{"Content-Type":"application/json","Authorization":`Bearer ${token}`}
+            })
+            const data = await res.json();
+          
+            const tbody = document.getElementById("resultsBody")
+            tbody.innerHTML="";
+            data.forEach((result) => {
+                const row = document.createElement("tr");
+                row.innerHTML =`<td>${result.hallticket_number}</td>
+                <td>${result.student_name}</td>
+                <td>${result.course}</td>
+                <td>${result.branch}</td>
+                <td>${result.year}</td>
+                <td>${result.semester}</td>
+                <td>${result.python}</td>
+                <td>${result.react}</td>
+                <td>${result.nodejs}</td>
+                <td>${result.total_marks}</td>
+                <td>${result.grade}</td>
+                <td>${result.result_status}</td>
+                <td><button type="button" onclick ="edit('${result.id}', '${result.hallticket_number}', '${result.student_name}', '${result.course}', '${result.branch}', '${result.year}', '${result.semester}', '${result.python}', '${result.react}', '${result.nodejs}')" id="editbtn">Edit</button></td>
+                <td><button type="button" onclick ="delet('${result.id}')" id="deletebtn">Delete</button></td>`;
+
+            tbody.appendChild(row);
+            });
+            const table=document.getElementById("resultsTable")
+            table.style.display = "table";
+        }  catch(err){
+            console.error("Error:", err);
+            alert("Failed to load results");
+        }   
+        });
+    let editid = null;
+   function edit(id,hallticket_number, student_name, course, branch, year, semester, python, react, nodejs){
+          editid = id;
+         document.getElementById("hall_ticket").value=hallticket_number;
+         document.getElementById("student_name").value=student_name;
+         document.getElementById("course").value=course;
+         document.getElementById("branch").value=branch;
+         document.getElementById("year").value=year;
+         document.getElementById("semester").value=semester;
+         document.getElementById("python").value=python;
+         document.getElementById("react").value=react;
+         document.getElementById("nodejs").value=nodejs;
+         
+    }
+    const update = document.getElementById("update")
+    update.addEventListener("click",async(e)=>{
+        e.preventDefault();
+         const token = localStorage.getItem("token");
+            console.log(token)
+            if(!token){
+                alert("please login")
+            }
+
+            const hallticket_number = document.getElementById("hall_ticket").value;
+            const student_name = document.getElementById("student_name").value;
+            const course = document.getElementById("course").value;
+            const branch = document.getElementById("branch").value;
+            const year = document.getElementById("year").value;
+            const semester = document.getElementById("semester").value;
+            const python = document.getElementById("python").value;
+            const react = document.getElementById("react").value;
+            const nodejs = document.getElementById("nodejs").value;
+            try{
+            const res =  await fetch(`https://resultsmanagementsystem.vercel.app/admin/results/${editid}`,{method:"PUT",
+                headers:{"Content-Type":"application/json","Authorization":`Bearer ${token}`},
+                body:JSON.stringify({editid,hallticket_number,student_name,course,branch,year,semester,python,react,nodejs})
+            })
+            const data = await res.json();
+            console.log(data)
+            if(res.ok){
+                alert("updated successfully")
+            }
+            else{
+                alert("something went wrong")
+            }
+           
+            }catch(err){
+                console.error("fetch error",err)
+              
+            }
+            getall();
+        })
+    async function delet(id){
+        const token = localStorage.getItem("token");
+        console.log(token)
+        try{
+            const res = await fetch(`https://resultsmanagementsystem.vercel.app/admin/results/${id}`,{method:"DELETE",
+                headers:{"Content_type":"application/json","Authorization":`Bearer ${token}`}
+            })
+            const data = await res.json();
+            console.log(data)
+            if(res.ok){
+                alert("deleted successfully")
+            }
+        }catch(err){
+            console.error("something went wrong",err)
+        }
+        getall();
+    }
+
+    </script>
+        
+</body>
+</html>

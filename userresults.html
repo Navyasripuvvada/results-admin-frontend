@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results Searching</title>
+    <style>
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+            gap:10px;
+        }
+        .container h1{
+            color: green;
+        }
+        .container h2{
+            color: maroon;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .inner1{
+            display: flex; 
+           align-items: center;
+           justify-content:space-around;
+           gap:10px;
+           width:800px;
+           height:40px;
+           border: 1px solid gray;
+           background-color: #ffdcfc;
+           
+        }
+        #htnosearch{
+           color:  rgb(11, 11, 121);
+           font-weight: bold;
+        }
+        
+        .inner2,.inner3,.inner4,.inner5{
+           display: flex; 
+           align-items: center;
+           justify-content:space-between;
+           gap:10px;
+           width:800px;  
+        }
+        #htnol,#totall,#namel,#gradel,#coursel,#statusl,#yearl,#branchl{
+            color: rgb(11, 11, 121);
+            background-color: #d3f0ff;
+             height: 14px;
+             padding: 5px;
+             width:100px;
+             font-weight: bold;
+        }
+        input{
+            height: 12px;
+            padding: 5px;
+            width:272px;
+        }
+        
+        #submitbtn{
+            height:25px;
+            width:90px;
+            background-color: rgb(75, 75, 207);
+            color:white;
+            font-weight: bold;
+            border: none;
+        }
+        #submitbtn:hover{
+            background-color: rgb(22, 22, 120);
+        }
+        .left1,.left2,.left3,.left4{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        .right1,.right2,.right3,.right4{
+            display: flex;
+            flex-direction: row; 
+            align-items: center;
+        }
+        table{
+
+        height:150px;
+        width:800px;
+        
+        }
+        table th{
+            height:30px;
+            color: rgb(11, 11, 121);
+            font-weight: bold;
+            background-color: #ffdcfc; ;
+        }
+        table th,tr,td{
+           border:1px solid grey;   
+        }
+        table tr,td{
+             background-color: #d3f0ff ;
+        }
+        table td{
+            text-align: center;
+            color: rgb(11, 11, 121); 
+            font-weight: bold;
+        }
+        input:focus{
+            border:1px solid blue;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JNTU-KAKINADA</h1>
+        <h2>Search Your Results Here...!</h2>
+        <div class="inner1">
+            <div class="left">
+                <label for="hallticket_number" id="htnosearch" >HallTicket Number:</label>
+                <input type="text" placeholder="enter your hallticket number" id="hallticket_number">
+            </div>
+            <div class="right">
+                <button type="submit" onclick="" id="submitbtn">Submit</button>
+            </div>
+        </div>
+        <div class="inner2">
+            <div class="left1">
+                <label for="ticket_number" id="htnol">HallTicket No</label>
+                <input type="text"  id="hallticket_number1">
+            </div>
+            <div class="right1">
+                <label for="total" id="totall">Total</label>
+                <input type="text" id="total">
+            </div>
+        </div>
+        <div class="inner3">
+            <div class="left2">
+                <label for="name" id="namel">Name</label>
+                <input type="text" id="name">
+            </div>
+            <div class="right2">
+                <label for="grade" id="gradel">Grade</label>
+                <input type="text" id="grade">
+            </div>
+        </div>
+         <div class="inner4">
+            <div class="left3">
+                <label for="course" id="coursel">Course</label>
+                <input type="text" id="course">
+            </div>
+            <div class="right3">
+                <label for="status" id="statusl">Status</label>
+                <input type="text" id="status">
+            </div>
+        </div>
+         <div class="inner5">
+            <div class="left2">
+                <label for="year" id="yearl">Year:</label>
+                <input type="text" id="year">
+            </div>
+            <div class="right2">
+                <label for="branch" id="branchl">Branch</label>
+                <input type="text" id="branch">
+            </div>
+        </div>
+       
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subjects</th>
+                    <th>Marks</th>
+                </tr>
+           </thead>
+           <tbody>
+                <tr>
+                    <td id="python">Python</td>
+                    <td id="pythonmarks"></td>
+                </tr>
+                <tr>
+                    <td id="react">React.js</td>
+                    <td id="reactmarks"></td>
+                </tr>
+                <tr>
+                    <td id="node">Node.js</td>
+                    <td id="nodemarks"></td>
+                </tr>
+           </tbody>
+        </table>
+    </div>
+    <script>
+        const submit = document.getElementById("submitbtn")
+        submit.addEventListener("click",async(e)=>{
+        e.preventDefault();
+        const HallTicket = document.getElementById("hallticket_number").value.trim();;
+        
+        if(!HallTicket){
+          alert("invalid hallticket number"); 
+          return;
+        }
+        try{
+            let data;
+        
+           const res =await fetch(`https://resultsmanagementsystem.vercel.app/user/results/${HallTicket}`)
+            data = await res.json();
+           if(!res.ok){
+                alert(data.message)
+                return;
+            }
+            document.getElementById("hallticket_number1").value=`${data.hallticket_number}`;
+            document.getElementById("total").value=`${data.total_marks}`;
+            document.getElementById("name").value=`${data.student_name}`;
+            document.getElementById("grade").value=`${data.grade}`;
+            document.getElementById("pythonmarks").innerText=`${data.python}`;
+            document.getElementById("reactmarks").innerText=`${data.react}`;
+            document.getElementById("nodemarks").innerText=`${data.nodejs}`;
+            document.getElementById("course").value=`${data.course}`;
+            document.getElementById("year").value=`${data.year}`;
+            document.getElementById("branch").value=`${data.branch}`;
+            document.getElementById("status").value=`${data.result_status}`;
+        }catch(err){
+            console.log(err)
+        }
+    })
+    const hallticketInput = document.getElementById("hallticket_number");
+
+    hallticketInput.addEventListener("input", () => {
+    if (hallticketInput.value.trim() === "") {
+        document.getElementById("name").value = "";
+        document.getElementById("course").value = "";
+        document.getElementById("branch").value = "";
+        document.getElementById("year").value = "";
+        document.getElementById("semester").value = "";
+        document.getElementById("status").value="";
+         document.getElementById("total").value="";
+          document.getElementById("hallticket_number1").value="";
+    }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin register</title>
+    <style>
+        body{
+            background-color: #dce5ee;
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+        }
+        .main h1{
+            color:green;
+        }
+        .main{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap:20px;
+            
+        }
+        .register{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap:10px;
+        }
+        .register h2{
+            color: navy;
+        }
+        input{
+            height: 25px;
+            width:250px;
+            border:1px solid gray;
+            font-size: bold;
+            padding: 2px;
+            padding-left: 10px;
+
+        }
+        input:focus{
+            border:1px solid navy;
+        }
+        #regsubmit{
+            height: 35px;
+            width:100px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+         #regsubmit:hover{
+            background-color: rgb(16, 101, 16);
+         }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>JNTU-KAKINADA</h1>
+        <div class="register">
+            <h2>Admin-Register</h2>
+            <input type="text" id=username placeholder="Username">
+            <input type="email" placeholder="E-mail" id="email">
+            <input type="password" placeholder="Password" id="password">
+            <button type="submit" id="regsubmit" onclick="">Submit</button>
+        </div>
+    </div>
+    <script>
+        registerButton = document.getElementById("regsubmit");
+        registerButton.addEventListener("click",async(e)=>{
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password=document.getElementById("password").value;
+            try{
+                const res=await fetch("https://resultsmanagementsystem.vercel.app/admin/register",{method:"POST",
+                    headers:{"Content-Type":"application/json"},body:JSON.stringify({username,email,password})
+                
+                })
+                const data =  await res.json();
+                if(data.success){
+                   alert(data.message)
+                }else{
+                    alert(data.message)
+                }
+                console.log(data);
+            }catch(err){
+                console.error("Fetch Error",err)
+                alert("something went wrong")
+            }
+            window.location.href="login.html"
+            })
+       
+    </script>
+</body>
+</html>

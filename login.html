@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin-login</title>
+    <style>
+        .main{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap:20px;
+            
+        }
+        .main h1{
+            color:green
+        }
+        .login{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap:10px;
+        }
+       .login h2{
+            color: navy;
+        }
+        input{
+            height: 25px;
+            width:250px;
+            border:1px solid gray;
+            font-size: bold;
+            padding: 2px;
+            padding-left: 10px;
+
+        }
+        input:focus{
+            border:1px solid navy;
+        }
+        #loginBtn{
+            height: 35px;
+            width:100px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+         #loginBtn:hover{
+            background-color: rgb(16, 101, 16);
+         }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>JNTU-KAKINADA</h1>
+        <div class="login">
+            <h2>Admin-Login</h2>
+            <input type="email" placeholder="E-mail" id="email">
+            <input type="password" placeholder="Password" id="password">
+            <button type="submit" id="loginBtn" onclick="">Login</button>
+        </div>
+    </div>
+    <script>
+        const login =  document.getElementById("loginBtn")
+        login.addEventListener("click",async(e)=>{
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            try{
+            const res = await fetch("https://resultsmanagementsystem.vercel.app/admin/login",{method:"POST",
+                headers:{"Content-Type":"application/json"},body:JSON.stringify({email,password})
+            })
+            const data = await res.json();
+            if(data.success){
+                alert(data.message)
+                  const token = data.token;
+                   console.log(token)
+                  localStorage.setItem("token", token);
+            }else{
+                alert(data.message)
+            }
+             }catch(err){
+                 console.error("Fetch Error",err)
+                alert("something went wrong")
+            }
+            window.location.href = "adminmanagement.html"
+        })
+    </script>
+    
+</body>
+</html> 
