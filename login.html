@@ -73,13 +73,18 @@
                 headers:{"Content-Type":"application/json"},body:JSON.stringify({email,password})
             })
             const data = await res.json();
-            if(data.success){
-                alert(data.message)
-                  const token = data.token;
-                   console.log(token)
-                  localStorage.setItem("token", token);
+            console.log(data);
+            if (res.ok) {
+            alert(data.message || "Login successful");
+
+            const token = data.token;
+            console.log("TOKEN:", token);
+
+            if (token) {
+                localStorage.setItem("token", token);
+            }
             }else{
-                alert(data.message)
+                alert(data.message||"Something went wrong")
             }
              }catch(err){
                  console.error("Fetch Error",err)

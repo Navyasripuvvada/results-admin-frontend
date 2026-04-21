@@ -80,10 +80,10 @@
                 
                 })
                 const data =  await res.json();
-                if(data.success){
-                   alert(data.message)
-                }else{
-                    alert(data.message)
+                if (res.ok) {
+                alert(data.message || "Success");
+                } else {
+                alert(data.message || "Something went wrong");
                 }
                 console.log(data);
             }catch(err){
